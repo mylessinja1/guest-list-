@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Guest List Manager</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #eee;
+      padding: 20px;
+    }
+
+    .wrapper {
+      max-width: 500px;
+      background: white;
+      margin: auto;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+    }
+
+    button {
+      padding: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #dff;
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .rsvp-btn {
+      margin: 5px;
+    }
+
+    @media(max-width: 600px) {
+      form {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <h2>Guest List 📋</h2>
+    <form id="guest-form">
+      <input type="text" id="name-input" placeholder="Enter guest name" required />
+      <button type="submit">Add</button>
+    </form>
+
+    <ul id="guest-list"></ul>
+  </div>
+
+  <script>
+    // grab stuff
+    const form = document.getElementById('guest-form');
+    const input = document.getElementById('name-input');
+    const list = document.getElementById('guest-list');
+
+    let people = []; // store all guests
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // no page reload
+
+      const name = input.value.trim();
+
+      if (name === "") return;
+
+      if (people.length >= 10) {
+        alert("Only 10 guests allowed.");
+        return;
+      }
+
+      // make new guest
+      const guest = {
+        id: Date.now(),
+        name: name,
+        rsvp: true,
+        timeAdded: new Date().toLocaleTimeString()
+      };
+
+      people.push(guest);
+      showGuests();
+      input.value = "";
+    });
+
+    function showGuests() {
+      list.innerHTML = "";
+
+      people.forEach(function(person) {
+        const li = document.createElement('li');
+
+        const span = document.createElement('span');
+        span.textContent = `${person.name} - ${person.rsvp ? "Coming 👍" : "Not Coming ❌"} @ ${person.timeAdded}`;
+
+        const rsvpBtn = document.createElement('button');
+        rsvpBtn.textContent = "RSVP?";
+        rsvpBtn.className = "rsvp-btn";
+        rsvpBtn.onclick = function() {
+          person.rsvp = !person.rsvp;
+          showGuests();
+        };
+
+        const delBtn = document.createElement('button');
+        delBtn.textContent = "Delete";
+        delBtn.onclick = function() {
+          people = people.filter(p => p.id !== person.id);
+          showGuests();
+        };
+
+        li.append(span, rsvpBtn, delBtn);
+        list.appendChild(li);
+      });
+    }
+  </script>
+
+</body>
+</html>
