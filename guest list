@@ -71,7 +71,7 @@
 <body>
 
   <div class="wrapper">
-    <h2>Guest List 📋</h2>
+    <h2>Guest List </h2>
     <form id="guest-form">
       <input type="text" id="name-input" placeholder="Enter guest name" required />
       <button type="submit">Add</button>
@@ -120,7 +120,7 @@
         const li = document.createElement('li');
 
         const span = document.createElement('span');
-        span.textContent = `${person.name} - ${person.rsvp ? "Coming 👍" : "Not Coming ❌"} @ ${person.timeAdded}`;
+        span.textContent = `${person.name} - ${person.rsvp ? "Coming " : "Not Coming "} @ ${person.timeAdded}`;
 
         const rsvpBtn = document.createElement('button');
         rsvpBtn.textContent = "RSVP?";
